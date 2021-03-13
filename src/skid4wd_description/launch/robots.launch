@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<launch>
+
+<!-- 
+    <group ns="/skid4wd1">
+
+        <rosparam file="$(find skid4wd_description)/config/controller.yaml" command="load"/>
+
+        <param name="/skid4wd1/robot_description" command="$(find xacro)/xacro.py $(find skid4wd_description)/urdf/skid4wd.xacro"/>
+        <arg name="x" default="0"/>
+        <arg name="y" default="0"/>
+        <arg name="z" default="0"/>
+        <node name="mybot_spawn1" pkg="gazebo_ros" type="spawn_model" output="screen" args="-urdf -param robot_description -model skid4wd1 -x $(arg x) -y $(arg y)  -z $(arg z)"/>
+
+
+        <node name="controller_spawner1" pkg="controller_manager" type="spawner" respawn="false"
+        output="screen"  args="joint_state_controller drive_controller "/>
+
+        <node name="robot_state_publisher1" pkg="robot_state_publisher" type="robot_state_publisher"
+        respawn="false" output="screen">
+            <remap from="/joint_states" to="/skid4wd/joint_states" />
+        </node>
+
+
+    </group>
+
+
+    <group ns="/skid4wd2">
+
+        <rosparam file="$(find skid4wd_description)/config/controller.yaml" command="load"/>
+
+        <param name="/skid4wd2/robot_description" command="$(find xacro)/xacro.py $(find skid4wd_description)/urdf/skid4wd.xacro"/>
+        <arg name="x" default="1"/>
+        <arg name="y" default="1"/>
+        <arg name="z" default="0"/>
+        <node name="mybot_spawn1" pkg="gazebo_ros" type="spawn_model" output="screen" args="-urdf -param robot_description -model skid4wd2 -x $(arg x) -y $(arg y)  -z $(arg z)"/>
+    
+        <node name="controller_spawner2" pkg="controller_manager" type="spawner" respawn="false"
+        output="screen" args="joint_state_controller drive_controller "/>
+
+        <node name="robot_state_publisher2" pkg="robot_state_publisher" type="robot_state_publisher"
+        respawn="false" output="screen">
+            <remap from="/joint_states" to="/skid4wd/joint_states" />
+        </node>
+
+</group> -->
+
+
+ <!-- No namespace here as we will share this description. Access with slash at the beginning -->
+  <param name="robot_description"
+    command="$(find xacro)/xacro.py $(find skid4wd_description)/urdf/skid4wd.xacro"/>
+<!--   <param name="robot_description_robotino"
+    command="$(find xacro)/xacro.py $(find robotino_description)/urdf/robotino.urdf.xacro" /> -->
+
+    <rosparam file="$(find skid4wd_description)/config/controller.yaml" command="load"/>
+
+
+
+
+  <!-- BEGIN ROBOT MIR 1-->
+  <group ns="robot1" >
+    <param name="tf_prefix" value="robot1_tf" />
+    <include file="$(find skid4wd_description)/launch/singlerobot.launch" >
+      <arg name="init_pose" value="-x 1 -y 1 -z 0" />
+      <arg name="robot_name"  value="Robot1" />
+    </include>
+  </group>
+
+
+  <!-- BEGIN ROBOT MIR 2-->
+  <group ns="robot2">
+    <param name="tf_prefix" value="robot2_tf" />
+    <include file="$(find skid4wd_description)/launch/singlerobot.launch" >
+      <arg name="init_pose" value="-x -1 -y 1 -z 0" />
+      <arg name="robot_name"  value="Robot2" />
+    </include>
+  </group>
+
+
+
+
+</launch>
